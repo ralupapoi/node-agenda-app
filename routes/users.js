@@ -51,4 +51,30 @@ router.delete('/delete', function (req, res, next) {
 
 });
 
+router.put('/update', function (req, res, next) {
+  const id = req.body.id;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+  const phone = req.body.phone;
+  console.warn('update', id, firstName, lastName, phone);
+  var persons = require('../public/data/persons.json');
+
+  const person = persons.find((p) => {
+    return p.id == id;
+  });
+  person.firstName = firstName;
+  person.lastName = lastName;
+  person.phone = phone;
+
+  var str = JSON.stringify(persons, null, 2);
+
+  fs.writeFileSync('./public/data/persons.json', str);
+
+  res.json({
+    success: true,
+    message: 'Done!'
+  });
+})
+
+
 module.exports = router;
